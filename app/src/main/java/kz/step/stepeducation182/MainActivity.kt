@@ -7,8 +7,11 @@ import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
-    var button: Button? = null
-    var textView: TextView? = null
+    var showWelcome: Button? = null
+    var welcomeMessage: TextView? = null
+
+    val peopleCount = 0
+    var studentsList: List<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,13 +21,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initializeViews(){
-        button = findViewById(R.id.button_main_activity_press)
-        textView = findViewById(R.id.textview_main_activity_text)
+        showWelcome = findViewById(R.id.button_main_activity_press)
+        welcomeMessage = findViewById(R.id.textview_main_activity_text)
     }
 
     fun initializeLiseners(){
-        button?.setOnClickListener {
-            textView?.setText("I am pressed!")
+        showWelcome?.setOnClickListener {
+            welcomeMessage?.setText("I am pressed!")
         }
+    }
+
+    fun initiateCountPersons(){
+
+    }
+
+    fun initiateRequestPersons(){
+
+    }
+
+    companion object{
+        const val KEY_PERSONS_NAME = "KEY_PERSONS_NAME"
     }
 }
