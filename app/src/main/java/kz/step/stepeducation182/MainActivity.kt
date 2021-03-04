@@ -5,23 +5,28 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 
 class MainActivity : AppCompatActivity() {
 
-    private var showWelcome: Button? = null
-    var welcomeMessage: TextView? = null
+    var fragmentContainer: FrameLayout? = null
 
-    var peopleCount = 0
-    var studentsList: List<String>? = null
+    var currentFragment: Fragment? = null
+
+    var fragmentManager: FragmentManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("LIFECYCLE", "onCreate")
         setContentView(R.layout.activity_main)
         initializeViews()
-        initializeLiseners()
+        if (currentFragment == null) {
+            initiateDisplayFragment(EnterFragment())
+        }
     }
 
     override fun onStart() {
@@ -64,39 +69,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initializeViews() {
-        showWelcome = findViewById(R.id.button_main_activity_press)
-        welcomeMessage = findViewById(R.id.textview_main_activity_text)
+        fragmentContainer = findViewById(R.id.framelayout_activity_main_fragment_container)
     }
 
-    fun initializeLiseners() {
-        showWelcome?.setOnClickListener {
-            initiateDisplaySecondActivity()
+    fun initiateDisplayFragment(fragment: Fragment) {
+        fragmentManager = supportFragmentManager
+
+        currentFragment?.run {
+            fragmentManager
+                ?.beginTransaction()
+                ?.hide(currentFragment!!)
         }
-    }
-
-    fun initiateDisplaySecondActivity() {
-        startActivityForResult(
-            Intent(this, SecondActivity::class.java).apply {
-                putExtra("Name", "Vasya")
-            }, REQUEST_CODE_RESULT
-        )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CODE_RESULT -> {
-                Toast.makeText(
-                    this,
-                    data?.getStringExtra(KEY_PERSONS_NAME),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
-    }
-
-    companion object {
-        const val REQUEST_CODE_RESULT = 1
-        const val KEY_PERSONS_NAME = "KEY_PERSONS_NAME"
+        fragmentManager
+            ?.beginTransaction()
+            ?.add(R.id.framelayout_activity_main_fragment_container, fragment)
+            ?.commit()
+        currentFragment = fragment
     }
 }
