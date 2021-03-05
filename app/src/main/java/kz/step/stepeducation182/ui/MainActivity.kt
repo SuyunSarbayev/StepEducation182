@@ -1,15 +1,12 @@
-package kz.step.stepeducation182
+package kz.step.stepeducation182.ui
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import kz.step.stepeducation182.R
 
 class MainActivity : AppCompatActivity() {
 
