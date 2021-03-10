@@ -1,6 +1,7 @@
 package kz.step.stepeducation182.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +11,17 @@ import androidx.recyclerview.widget.RecyclerView
 import kz.step.stepeducation182.R
 import kz.step.stepeducation182.adapters.StudentsAdapter
 import kz.step.stepeducation182.data.Student
+import kotlinx.android.synthetic.main.fragment_enter.*
 
 class EnterFragment : Fragment() {
 
     lateinit var rootView: View
 
-    var students: RecyclerView? = null
     var studentsAdapter: StudentsAdapter? = null
+    var name: String = "This.is values with dots. which will be replaced."
+
+    var x = 5
+    var surname = "Wick"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +50,10 @@ class EnterFragment : Fragment() {
     }
 
     fun initializeViews() {
-        students = rootView.findViewById(R.id.recyclerview_fragment_enter_students)
+        Log.d("VARIABLE", name.replaceDots())
+        if(name is String){
+            Log.d("VARIABLE name", "is string")
+        }
     }
 
     fun initializeAdapter() {
@@ -53,96 +61,12 @@ class EnterFragment : Fragment() {
             Student().apply {
                 name = "John"
                 surname = "Wick"
-            },
-            Student().apply {
-                name = "Ellen"
-                surname = "Page"
-            },
-            Student().apply {
-                name = "Vasya"
-                surname = "Pipkin"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
-            },
-            Student().apply {
-                name = "Peter"
-                surname = "Jackson"
             }
         ))
-        students?.adapter = studentsAdapter
+        recyclerview_fragment_enter_students?.adapter = studentsAdapter
     }
 
     fun initializeLinearLayoutManager(){
-        students?.layoutManager = LinearLayoutManager(requireContext())
+        recyclerview_fragment_enter_students?.layoutManager = LinearLayoutManager(requireContext())
     }
 }
