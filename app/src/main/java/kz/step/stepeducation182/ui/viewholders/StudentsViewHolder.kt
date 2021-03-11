@@ -1,4 +1,4 @@
-package kz.step.stepeducation182.viewholders
+package kz.step.stepeducation182.ui.viewholders
 
 import android.view.View
 import android.widget.TextView

@@ -1,4 +1,4 @@
-package kz.step.stepeducation182.adapters
+package kz.step.stepeducation182.ui.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kz.step.stepeducation182.R
 import kz.step.stepeducation182.data.Student
-import kz.step.stepeducation182.viewholders.StudentsViewHolder
+import kz.step.stepeducation182.ui.viewholders.StudentsViewHolder
 
 class StudentsAdapter(
     var studentsList: MutableList<Student>
