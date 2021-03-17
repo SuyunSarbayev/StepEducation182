@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <EditText
+        android:id="@+id/edittext_fragment_create_note_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/project_margin_default_16dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/edittext_fragment_create_note_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_fragment_create_note_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/project_margin_default_16dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/edittext_fragment_create_note_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_fragment_create_note_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/project_margin_default_16dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/imageview_fragment_create_note_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:src="@drawable/ic_baseline_center_focus_strong_24"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_fragment_create_note_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/project_margin_default_16dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        app:layout_constraintEnd_toEndOf="parent"
+        android:tint="@color/white"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_margin="@dimen/project_margin_default_16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/ic_baseline_center_focus_strong_24"
+        android:layout_width="56dp"
+        style="@style/Widget.Design.FloatingActionButton"
+        android:layout_height="56dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

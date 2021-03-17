@@ -1,4 +1,4 @@
-package kz.step.stepeducation182.ui
+package kz.step.stepeducation182.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +13,7 @@ import kz.step.stepeducation182.data.Student
 import kotlinx.android.synthetic.main.fragment_enter.*
 import kz.step.stepeducation182.ui.contract.EnterFragmentContract
 import kz.step.stepeducation182.ui.presenter.EnterFragmentPresenter
+import kz.step.stepeducation182.ui.replaceDots
 
 class EnterFragment : Fragment(), EnterFragmentContract.View {
 

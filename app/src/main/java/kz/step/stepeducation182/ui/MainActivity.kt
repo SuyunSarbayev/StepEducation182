@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import kz.step.stepeducation182.R
+import kz.step.stepeducation182.ui.fragments.EnterFragment
 
 class MainActivity : AppCompatActivity() {
 
