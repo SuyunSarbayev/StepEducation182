@@ -11,6 +11,8 @@ import kz.step.stepeducation182.R
 import kz.step.stepeducation182.ui.adapters.StudentsAdapter
 import kz.step.stepeducation182.data.Student
 import kotlinx.android.synthetic.main.fragment_enter.*
+import kz.step.stepeducation182.ui.MainActivity
+import kz.step.stepeducation182.ui.adapters.ViewPagerAdapter
 import kz.step.stepeducation182.ui.contract.EnterFragmentContract
 import kz.step.stepeducation182.ui.presenter.EnterFragmentPresenter
 import kz.step.stepeducation182.ui.replaceDots
@@ -19,15 +21,11 @@ class EnterFragment : Fragment(), EnterFragmentContract.View {
 
     lateinit var rootView: View
 
-    ViewModel
-    var enterFragmentPresenter: EnterFragmentPresenter
-            = EnterFragmentPresenter()
+    var enterFragmentPresenter: EnterFragmentPresenter = EnterFragmentPresenter()
 
     var studentsAdapter: StudentsAdapter? = null
-    var name: String = "This.is values with dots. which will be replaced."
 
-    var x = 5
-    var surname = "Wick"
+    var students: ArrayList<Student> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,18 +55,27 @@ class EnterFragment : Fragment(), EnterFragmentContract.View {
     }
 
     override fun initializeViews() {
-        Log.d("VARIABLE", name.replaceDots())
-        if(name is String){
-            Log.d("VARIABLE name", "is string")
-        }
+
     }
 
     override fun initializeAdapter(students: MutableList<Student>) {
-        studentsAdapter = StudentsAdapter(students)
-        recyclerview_fragment_enter_students?.adapter = studentsAdapter
+        this.students = students as ArrayList<Student>
+        studentsAdapter = StudentsAdapter(studentsList = this.students)
+        recyclerview_fragment_enter.adapter = studentsAdapter
     }
 
-    override fun initializeLinearLayoutManager(){
-        recyclerview_fragment_enter_students?.layoutManager = LinearLayoutManager(requireContext())
+    override fun initializeLinearLayoutManager() {
+        recyclerview_fragment_enter.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    fun initiateDisplayStudents(position: Int){
+        (activity as MainActivity).initiateDisplayFragment(
+            FragmentStudentsDetail().apply {
+                arguments = Bundle().apply {
+                    putParcelableArrayList("students", this@EnterFragment.students)
+                    putInt("student_position", position)
+                }
+            }
+        )
     }
 }

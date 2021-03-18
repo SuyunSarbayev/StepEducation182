@@ -1,6 +1,10 @@
 package kz.step.stepeducation182.data
 
-class Student {
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+class Student : Parcelable{
     var name: String = ""
     var surname: String = ""
 }
