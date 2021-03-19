@@ -1,11 +1,18 @@
 package kz.step.stepeducation182.ui.fragments
 
+import android.app.AlertDialog
+import android.app.DatePickerDialog
+import android.app.Dialog
+import android.content.DialogInterface
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import android.widget.DatePicker
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import kz.step.stepeducation182.R
 import kz.step.stepeducation182.ui.adapters.StudentsAdapter
@@ -13,13 +20,17 @@ import kz.step.stepeducation182.data.Student
 import kotlinx.android.synthetic.main.fragment_enter.*
 import kz.step.stepeducation182.ui.MainActivity
 import kz.step.stepeducation182.ui.adapters.ViewPagerAdapter
+import kz.step.stepeducation182.ui.base.BaseFragment
 import kz.step.stepeducation182.ui.contract.EnterFragmentContract
+import kz.step.stepeducation182.ui.dialog.StudentCardDialog
 import kz.step.stepeducation182.ui.presenter.EnterFragmentPresenter
 import kz.step.stepeducation182.ui.replaceDots
+import java.text.DateFormat
 
-class EnterFragment : Fragment(), EnterFragmentContract.View {
-
-    lateinit var rootView: View
+class EnterFragment :
+    BaseFragment(),
+    DatePickerDialog.OnDateSetListener,
+    EnterFragmentContract.View {
 
     var enterFragmentPresenter: EnterFragmentPresenter = EnterFragmentPresenter()
 
@@ -36,22 +47,65 @@ class EnterFragment : Fragment(), EnterFragmentContract.View {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        rootView =
-            LayoutInflater.from(requireContext())
-                .inflate(
-                    R.layout.fragment_enter,
-                    container,
-                    false
-                )
+        super.onCreateView(inflater, container, savedInstanceState)
         enterFragmentPresenter.setView(this)
         return rootView
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
         enterFragmentPresenter.initiateRetrieveStudents()
         initializeLinearLayoutManager()
+        initiateDisplayDialogStudent()
+    }
+
+    override fun initializeLayout(): Int {
+        return R.layout.fragment_enter
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun initiateDisplayDialogStudent(){
+        var datePicker = DatePickerDialog(requireContext())
+        datePicker.show()
+//        var fragmentManager = activity?.supportFragmentManager
+//        var studentCardDialog = StudentCardDialog().apply {
+//            arguments = Bundle().apply {
+//                this.putInt("Age", 15)
+//            }
+//        }
+//        studentCardDialog.setTargetFragment(this, kz_step_stepeducation182_STUDENT_DIALOG)
+//        studentCardDialog.show(fragmentManager!!, StudentCardDialog::class.java.name)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    fun initiateDisplayAlert(){
+        AlertDialog.Builder(requireContext())
+            .setTitle("This is alert title")
+            .setMessage("This is alert message")
+            .setIcon(R.drawable.ic_baseline_add_circle_24)
+//            .setNeutralButton("This is neutral", object: DialogInterface.OnClickListener{
+//                override fun onClick(p0: DialogInterface?, p1: Int) {
+//                    p0?.dismiss()
+//                }
+//
+//            })
+            .setPositiveButton("Ok", object: DialogInterface.OnClickListener{
+                override fun onClick(p0: DialogInterface?, p1: Int) {
+                    p0?.dismiss()
+                }
+            })
+            .setNegativeButton("Cancel", object: DialogInterface.OnClickListener{
+                override fun onClick(p0: DialogInterface?, p1: Int) {
+                    p0?.dismiss()
+                }
+            })
+            .create()
+            .show()
     }
 
     override fun initializeViews() {
@@ -77,5 +131,13 @@ class EnterFragment : Fragment(), EnterFragmentContract.View {
                 }
             }
         )
+    }
+
+    companion object{
+        const val kz_step_stepeducation182_STUDENT_DIALOG = 101
+    }
+
+    override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
+
     }
 }
