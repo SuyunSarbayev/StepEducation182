@@ -2,7 +2,6 @@ package kz.step.stepeducation182.ui.fragments
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
@@ -14,18 +13,17 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import kz.step.stepeducation182.R
 import kz.step.stepeducation182.ui.adapters.StudentsAdapter
 import kz.step.stepeducation182.data.Student
 import kotlinx.android.synthetic.main.fragment_enter.*
+import kz.step.stepeducation182.data.database.StudentDatabase
+import kz.step.stepeducation182.data.database.entity.StudentRoomEntity
 import kz.step.stepeducation182.ui.MainActivity
-import kz.step.stepeducation182.ui.adapters.ViewPagerAdapter
 import kz.step.stepeducation182.ui.base.BaseFragment
 import kz.step.stepeducation182.ui.contract.EnterFragmentContract
-import kz.step.stepeducation182.ui.dialog.StudentCardDialog
 import kz.step.stepeducation182.ui.presenter.EnterFragmentPresenter
-import kz.step.stepeducation182.ui.replaceDots
-import java.text.DateFormat
 
 class EnterFragment :
     BaseFragment(),
@@ -59,6 +57,32 @@ class EnterFragment :
         enterFragmentPresenter.initiateRetrieveStudents()
         initializeLinearLayoutManager()
         initiateDisplayDialogStudent()
+
+        var student: StudentRoomEntity = StudentRoomEntity()
+            .apply {
+            name = "Mark"
+            groupName = 0
+        }
+
+        var studentDatabase: StudentDatabase =
+            Room.databaseBuilder(requireContext(),
+            StudentDatabase::class.java,
+            "studentDatabase")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build()
+
+//        studentDatabase
+//            .getStudentGroupDao()
+//            .initiateInsertStudentGroup(StudentsGroup().apply {
+//                title = 0
+//            })
+
+        studentDatabase.getStudentDao().initiateInsertStudent(student)
+
+        Log.d("DATA", studentDatabase
+            .getStudentGroupDao()
+            .initiateGetStudentFromGroup(0).toString())
     }
 
     override fun initializeLayout(): Int {
