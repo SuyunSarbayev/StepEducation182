@@ -20,10 +20,16 @@ import kz.step.stepeducation182.data.Student
 import kotlinx.android.synthetic.main.fragment_enter.*
 import kz.step.stepeducation182.data.database.StudentDatabase
 import kz.step.stepeducation182.data.database.entity.StudentRoomEntity
+import kz.step.stepeducation182.di.ApplicationModule
+import kz.step.stepeducation182.di.DaggerApplicationComponent
+import kz.step.stepeducation182.domain.RetrieveStudentsUseCase
+import kz.step.stepeducation182.domain.SortStudentsUseCase
+import kz.step.stepeducation182.domain.UseCasePersonsCount
 import kz.step.stepeducation182.ui.MainActivity
 import kz.step.stepeducation182.ui.base.BaseFragment
 import kz.step.stepeducation182.ui.contract.EnterFragmentContract
 import kz.step.stepeducation182.ui.presenter.EnterFragmentPresenter
+import javax.inject.Inject
 
 class EnterFragment :
     BaseFragment(),
@@ -35,6 +41,8 @@ class EnterFragment :
     var studentsAdapter: StudentsAdapter? = null
 
     var students: ArrayList<Student> = ArrayList()
+
+    @Inject lateinit var studentsSortUseCase: SortStudentsUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,36 +61,42 @@ class EnterFragment :
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initializeDependencies()
         initializeViews()
         enterFragmentPresenter.initiateRetrieveStudents()
         initializeLinearLayoutManager()
         initiateDisplayDialogStudent()
 
+        studentsSortUseCase.initiateSortStudents(mutableListOf<Student>())
+    }
+
+    fun initializeDatabase(){
         var student: StudentRoomEntity = StudentRoomEntity()
             .apply {
-            name = "Mark"
-            groupName = 0
-        }
+                name = "Mark"
+                groupName = 0
+            }
 
         var studentDatabase: StudentDatabase =
             Room.databaseBuilder(requireContext(),
-            StudentDatabase::class.java,
-            "studentDatabase")
+                StudentDatabase::class.java,
+                "studentDatabase")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build()
-
-//        studentDatabase
-//            .getStudentGroupDao()
-//            .initiateInsertStudentGroup(StudentsGroup().apply {
-//                title = 0
-//            })
 
         studentDatabase.getStudentDao().initiateInsertStudent(student)
 
         Log.d("DATA", studentDatabase
             .getStudentGroupDao()
             .initiateGetStudentFromGroup(0).toString())
+    }
+
+    fun initializeDependencies(){
+        DaggerApplicationComponent.builder()
+            .applicationModule(ApplicationModule())
+            .build()
+            .inject(this)
     }
 
     override fun initializeLayout(): Int {
