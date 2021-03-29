@@ -14,21 +14,25 @@ import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
-import kz.step.stepeducation182.R
-import kz.step.stepeducation182.ui.adapters.StudentsAdapter
-import kz.step.stepeducation182.data.Student
 import kotlinx.android.synthetic.main.fragment_enter.*
+import kz.step.stepeducation182.R
+import kz.step.stepeducation182.data.Student
 import kz.step.stepeducation182.data.database.StudentDatabase
 import kz.step.stepeducation182.data.database.entity.StudentRoomEntity
+import kz.step.stepeducation182.data.network.Api
+import kz.step.stepeducation182.data.network.RetrofitCreator
+import kz.step.stepeducation182.data.network.ReturnData
 import kz.step.stepeducation182.di.ApplicationModule
 import kz.step.stepeducation182.di.DaggerApplicationComponent
-import kz.step.stepeducation182.domain.RetrieveStudentsUseCase
 import kz.step.stepeducation182.domain.SortStudentsUseCase
-import kz.step.stepeducation182.domain.UseCasePersonsCount
 import kz.step.stepeducation182.ui.MainActivity
+import kz.step.stepeducation182.ui.adapters.StudentsAdapter
 import kz.step.stepeducation182.ui.base.BaseFragment
 import kz.step.stepeducation182.ui.contract.EnterFragmentContract
 import kz.step.stepeducation182.ui.presenter.EnterFragmentPresenter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
 class EnterFragment :
@@ -68,6 +72,18 @@ class EnterFragment :
         initiateDisplayDialogStudent()
 
         studentsSortUseCase.initiateSortStudents(mutableListOf<Student>())
+
+        val api: Api = RetrofitCreator().initializeApiInterface()
+
+        api.initiateGetData().enqueue(object: Callback<ReturnData> {
+            override fun onFailure(call: Call<ReturnData>, t: Throwable) {
+                Log.d("DATA", "FAILURE " + t.toString())
+            }
+
+            override fun onResponse(call: Call<ReturnData>, response: Response<ReturnData>) {
+                Log.d("DATA", "SUCCESS " + response.body().toString())
+            }
+        })
     }
 
     fun initializeDatabase(){
@@ -87,9 +103,18 @@ class EnterFragment :
 
         studentDatabase.getStudentDao().initiateInsertStudent(student)
 
-        Log.d("DATA", studentDatabase
-            .getStudentGroupDao()
-            .initiateGetStudentFromGroup(0).toString())
+//        val listCall: Call<*> = jsonPlaceHolderApi.getPosts()
+//
+//        listCall.enqueue(object : Callback<*>() {
+//            fun onResponse(
+//                call: Call<*>,
+//                response: Response<*>
+//            ) {}
+//            fun onFailure(
+//                call: Call<*>,
+//                t: Throwable
+//            ) {}
+//        })
     }
 
     fun initializeDependencies(){
