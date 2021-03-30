@@ -14,6 +14,11 @@ import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_enter.*
 import kz.step.stepeducation182.R
 import kz.step.stepeducation182.data.Student
@@ -24,6 +29,7 @@ import kz.step.stepeducation182.data.network.RetrofitCreator
 import kz.step.stepeducation182.data.network.ReturnData
 import kz.step.stepeducation182.di.ApplicationModule
 import kz.step.stepeducation182.di.DaggerApplicationComponent
+import kz.step.stepeducation182.domain.GetRatesUseCase
 import kz.step.stepeducation182.domain.SortStudentsUseCase
 import kz.step.stepeducation182.ui.MainActivity
 import kz.step.stepeducation182.ui.adapters.StudentsAdapter
@@ -33,12 +39,16 @@ import kz.step.stepeducation182.ui.presenter.EnterFragmentPresenter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class EnterFragment :
     BaseFragment(),
     DatePickerDialog.OnDateSetListener,
     EnterFragmentContract.View {
+
+    var getRatesUseCase = GetRatesUseCase()
 
     var enterFragmentPresenter: EnterFragmentPresenter = EnterFragmentPresenter()
 
@@ -73,17 +83,23 @@ class EnterFragment :
 
         studentsSortUseCase.initiateSortStudents(mutableListOf<Student>())
 
-        val api: Api = RetrofitCreator().initializeApiInterface()
+        getRatesUseCase.execute(observerItem())
 
-        api.initiateGetData().enqueue(object: Callback<ReturnData> {
-            override fun onFailure(call: Call<ReturnData>, t: Throwable) {
-                Log.d("DATA", "FAILURE " + t.toString())
-            }
+    }
 
-            override fun onResponse(call: Call<ReturnData>, response: Response<ReturnData>) {
-                Log.d("DATA", "SUCCESS " + response.body().toString())
-            }
-        })
+    class observerItem: DisposableObserver<ReturnData>(){
+        override fun onComplete() {
+            Log.d("observerItem", "onComplete")
+        }
+
+        override fun onNext(t: ReturnData) {
+            Log.d("observerItem", t.toString())
+        }
+
+        override fun onError(e: Throwable) {
+            Log.d("observerItem", "onError")
+        }
+
     }
 
     fun initializeDatabase(){
